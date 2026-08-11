@@ -1,0 +1,2182 @@
+<meta charset="utf-8">
+<title>Scramble Cup 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ground: #0f1512;
+    --panel: #171e1a;
+    --panel-2: #1e2622;
+    --line: rgba(233, 220, 189, 0.08);
+    --line-strong: rgba(233, 220, 189, 0.18);
+    --ink: #ede2c9;
+    --ink-dim: #b8ad95;
+    --muted: #7a8580;
+    --gold: #c9a961;
+    --gold-dim: #8a7541;
+    --fairway: #6b9b4d;
+    --rough: #b04a3d;
+    --warm: #d4a04a;
+    --cool: #7d6a48;
+    --shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 20px 40px rgba(0,0,0,0.35);
+
+    --p-martti: #4fb3a9;
+    --p-vahur: #d69a3c;
+    --p-priit: #c96a4d;
+    --p-andrus: #9a7bc8;
+    --p-silver: #b8bcc0;
+    --p-romet: #a3453f;
+
+    --display: "Didot", "Bodoni 72", "Playfair Display", "DM Serif Display", Georgia, "Times New Roman", serif;
+    --body: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  :root[data-theme="light"] {
+    --ground: #f5efe1;
+    --panel: #ede4cf;
+    --panel-2: #e4d9be;
+    --line: rgba(15, 21, 18, 0.08);
+    --line-strong: rgba(15, 21, 18, 0.18);
+    --ink: #1a2019;
+    --ink-dim: #4a4a3f;
+    --muted: #6b6b5c;
+    --gold: #8a6a2b;
+    --gold-dim: #b39554;
+    --fairway: #4a7a3f;
+    --rough: #8f3a30;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ground: #f5efe1;
+      --panel: #ede4cf;
+      --panel-2: #e4d9be;
+      --line: rgba(15, 21, 18, 0.08);
+      --line-strong: rgba(15, 21, 18, 0.18);
+      --ink: #1a2019;
+      --ink-dim: #4a4a3f;
+      --muted: #6b6b5c;
+      --gold: #8a6a2b;
+      --gold-dim: #b39554;
+      --fairway: #4a7a3f;
+      --rough: #8f3a30;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--ground); color: var(--ink); }
+  body {
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background-image:
+      radial-gradient(ellipse 800px 400px at 50% -100px, rgba(201, 169, 97, 0.06), transparent 60%);
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  .eyebrow {
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* HERO */
+  .hero { text-align: center; padding-top: 12px; }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(52px, 12vw, 96px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin: 8px 0 4px;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero .rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim) 20%, var(--gold-dim) 80%, transparent);
+    margin: 22px auto;
+    width: 60%;
+  }
+  .hero .meta {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    color: var(--ink-dim);
+    font-size: 13px;
+  }
+  .hero .meta div { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .hero .meta .num {
+    font-family: var(--display);
+    font-size: 26px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .hero .meta .lbl {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SECTION */
+  section h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 20px;
+  }
+  section h2 + .sub {
+    margin-top: -16px;
+  }
+  section .sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  /* LEADERBOARD */
+  .board {
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .row:last-child { border-bottom: none; }
+  .row .rank {
+    font-family: var(--display);
+    font-size: 22px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+  .row.rank-1 .rank { color: var(--gold); }
+  .row.last .rank { color: var(--rough); }
+  .row .who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display);
+    font-size: 16px;
+    color: #0d100e;
+    background: var(--pc, #999);
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
+  }
+  .name {
+    font-family: var(--body);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: 2px;
+  }
+  .badge.gold { background: var(--gold); color: #201709; font-weight: 700; }
+  .badge.hot { background: var(--rough); color: #fff; font-weight: 700; }
+  .stat {
+    text-align: right;
+    display: flex; flex-direction: column;
+    line-height: 1.1;
+  }
+  .stat .n {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .stat .l {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .row .played {
+    display: flex; flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .dots { display: flex; gap: 4px; }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--line-strong);
+  }
+  .dot.on { background: var(--gold); }
+
+  /* Progress bar overlay on leaderboard row */
+  .row .bar {
+    position: absolute;
+    left: 0; bottom: 0;
+    height: 2px;
+    background: var(--pc, var(--gold));
+    opacity: 0.45;
+  }
+
+  /* MATRIX */
+  .matrix-wrap {
+    overflow-x: auto;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 18px;
+  }
+  .matrix {
+    display: grid;
+    grid-template-columns: 44px repeat(6, 1fr);
+    gap: 4px;
+    min-width: 420px;
+  }
+  .m-head, .m-side {
+    display: flex; align-items: center; justify-content: center;
+    height: 44px;
+    font-family: var(--display);
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+  .m-side {
+    background: transparent;
+    color: var(--ink);
+  }
+  .m-head .mini-av {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--pc);
+    color: #0d100e;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display);
+    font-size: 13px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    position: relative;
+    gap: 1px;
+  }
+  .cell.self {
+    background:
+      repeating-linear-gradient(45deg,
+        transparent, transparent 4px,
+        var(--line) 4px, var(--line) 5px);
+    border: 1px dashed var(--line-strong);
+  }
+  .cell.untested {
+    background:
+      repeating-linear-gradient(-45deg,
+        var(--panel-2), var(--panel-2) 4px,
+        transparent 4px, transparent 8px);
+    opacity: 0.55;
+  }
+  .cell .score {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .cell .times {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cell.hot     { background: var(--gold);    color: #201709; border-color: var(--gold); }
+  .cell.hot .times { color: rgba(32,23,9,0.55); }
+  .cell.warm    { background: var(--fairway); color: #0d100e; border-color: var(--fairway); }
+  .cell.warm .times { color: rgba(13,16,14,0.55); }
+  .cell.cool    { background: var(--cool);    color: var(--ink); border-color: var(--cool); }
+  .cell.cold    { background: var(--rough);   color: #fff; border-color: var(--rough); }
+  .cell.cold .times { color: rgba(255,255,255,0.6); }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-radius: 2px;
+  }
+
+  /* ROUNDS */
+  .rounds { display: flex; flex-direction: column; gap: 18px; }
+  .round-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 18px;
+  }
+  .round-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .round-head .num {
+    font-family: var(--display);
+    font-size: 24px;
+  }
+  .round-head .num em { color: var(--gold); font-style: normal; }
+  .round-head .date {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .pair-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 10px 0;
+    gap: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pair-row:last-of-type { border-bottom: none; }
+  .pair-people {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .pair-people .plus {
+    color: var(--muted);
+    font-family: var(--display);
+    font-size: 18px;
+  }
+  .mini-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+  }
+  .mini-tag .dot-sm {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--pc);
+  }
+  .pair-score {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  .pair-row.best .pair-score { color: var(--gold); }
+  .pair-row.best::after {
+    content: "✦";
+    color: var(--gold);
+    margin-left: 6px;
+  }
+  .sat-out {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .sat-out .sat-lbl {
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+
+  /* RULES */
+  details.rules {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  details.rules > summary {
+    padding: 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--display);
+    font-size: 24px;
+  }
+  details.rules > summary::-webkit-details-marker { display: none; }
+  details.rules > summary::after {
+    content: "+";
+    font-family: var(--display);
+    font-size: 26px;
+    color: var(--gold);
+    transition: transform 0.2s;
+  }
+  details.rules[open] > summary::after { content: "−"; }
+  details.rules .body {
+    padding: 0 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  details.rules h3 {
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 8px 0 6px;
+    font-weight: 600;
+  }
+  details.rules ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  details.rules li { padding: 3px 0; }
+  details.rules li strong { color: var(--ink); font-weight: 600; }
+  .prize-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .prize-table th, .prize-table td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .prize-table th {
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .prize-table td {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .prize-table tr.current {
+    background: rgba(201, 169, 97, 0.08);
+  }
+  .prize-table tr.current td:first-child::before {
+    content: "▸ ";
+    color: var(--gold);
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-top: 20px;
+  }
+  footer .swords {
+    color: var(--gold);
+    margin: 0 8px;
+  }
+
+  /* PLAYER CARDS (per-player view) */
+  .player-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .player-head {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .player-head .p-av {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--pc);
+    display: flex; align-items: center; justify-content: center;
+    color: #0d100e;
+    font-family: var(--display);
+    font-size: 18px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
+  }
+  .player-head .p-name {
+    font-family: var(--display);
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .player-head .p-sub {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .player-head .p-total {
+    text-align: right;
+    display: flex; flex-direction: column;
+    line-height: 1.1;
+  }
+  .player-head .p-total .n {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 24px;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+  }
+  .player-head .p-total .l {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .p-rounds { padding: 6px 18px 12px; }
+  .p-round-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 14px;
+  }
+  .p-round-row:last-child { border-bottom: none; }
+  .p-round-row.pending { opacity: 0.5; }
+  .p-round-row .plus { color: var(--muted); font-family: var(--display); font-size: 18px; }
+  .p-round-row .partner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .p-round-row .partner .dot-sm {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--pc);
+  }
+  .p-round-row .p-score {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .p-round-row.best .p-score { color: var(--gold); }
+  .p-round-row .p-date {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-align: right;
+    display: block;
+    margin-top: 2px;
+  }
+  .p-round-row .pending-tag {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px dashed var(--line-strong);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  /* Interactive + toggle on expandable rows */
+  .p-round-row .p-plus {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: var(--body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    cursor: default;
+    transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.25s;
+  }
+  /* Pending row: − minus, dim */
+  .p-round-row.pending .p-plus {
+    color: var(--muted);
+    opacity: 0.5;
+    border-style: dashed;
+  }
+  /* Expandable (played) row: + brighter, clickable */
+  .p-round-row.expandable .p-plus {
+    cursor: pointer;
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .p-round-row.expandable .p-plus:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(201, 169, 97, 0.1);
+  }
+  .p-round-row.expandable.open .p-plus {
+    transform: rotate(45deg);
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(201, 169, 97, 0.14);
+  }
+  .p-sc-slot {
+    display: none;
+    padding: 8px 0 14px;
+  }
+  .p-sc-slot.open { display: block; }
+  .p-sc-slot .scorecard {
+    display: block;
+    margin-top: 0;
+  }
+
+  /* SCORECARD (inside round card) */
+  .sc-toggle {
+    margin-top: 16px;
+    background: rgba(201, 169, 97, 0.08);
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    padding: 14px 16px;
+    border-radius: 3px;
+    font-family: var(--body);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .sc-toggle:hover {
+    background: rgba(201, 169, 97, 0.16);
+    border-color: var(--gold);
+  }
+  .sc-toggle .caret {
+    color: var(--gold);
+    font-size: 16px;
+    transition: transform 0.2s;
+  }
+  .sc-toggle.open .caret { transform: rotate(180deg); }
+  .sc-toggle.open {
+    background: transparent;
+    color: var(--ink-dim);
+    border-color: var(--line);
+  }
+
+  .scorecard {
+    display: none;
+    margin-top: 12px;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--panel-2);
+    -webkit-overflow-scrolling: touch;
+  }
+  .scorecard.open { display: block; }
+  .sc-table {
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    width: 100%;
+    min-width: 640px;
+  }
+  .sc-table th, .sc-table td {
+    padding: 6px 4px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    min-width: 28px;
+    line-height: 1.15;
+  }
+  .sc-table th:last-child, .sc-table td:last-child { border-right: none; }
+  .sc-table tbody tr:last-child td { border-bottom: none; }
+  .sc-table thead th {
+    font-family: var(--body);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 8px 4px;
+    background: var(--panel);
+  }
+  .sc-table .sc-label {
+    text-align: left;
+    padding-left: 10px;
+    color: var(--ink-dim);
+    font-family: var(--body);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    min-width: 92px;
+    white-space: nowrap;
+    background: var(--panel);
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+  .sc-table thead .sc-label { z-index: 3; }
+  .sc-table .sc-sub {
+    display: block;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-top: 1px;
+  }
+  .sc-table .sep {
+    background: var(--panel);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .sc-table .sc-par-row td { color: var(--muted); font-size: 11px; }
+  .sc-table .sc-par-row .sep { color: var(--ink-dim); }
+  .sc-table .sc-dist-row td { color: var(--muted); font-size: 10px; }
+
+  .sc-table .sc-score-row td { color: var(--ink); font-size: 13px; font-weight: 500; }
+
+  /* Score coloring */
+  .sc-eagle    { background: rgba(90, 140, 255, 0.22); color: #a8c4ff !important; font-weight: 700; }
+  .sc-birdie   { background: rgba(107, 155, 77, 0.22); color: #a5cf82 !important; font-weight: 600; }
+  .sc-bogey    { background: rgba(212, 160, 74, 0.14); }
+  .sc-double   { background: rgba(176, 74, 61, 0.28); color: #ffb0a5 !important; font-weight: 600; }
+
+  /* Light-mode score colors (darker text on solid backgrounds) */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .sc-eagle   { background: rgba(50, 100, 200, 0.20); color: #14336b !important; }
+    :root:not([data-theme="dark"]) .sc-birdie  { background: rgba(74, 122, 63, 0.22); color: #2a4a1c !important; }
+    :root:not([data-theme="dark"]) .sc-bogey   { background: rgba(143, 108, 44, 0.14); color: #5a4210 !important; }
+    :root:not([data-theme="dark"]) .sc-double  { background: rgba(143, 58, 48, 0.20); color: #6b1a10 !important; }
+    :root:not([data-theme="dark"]) .sc-birdie .sc-mark { border-color: #4a7a3f; }
+    :root:not([data-theme="dark"]) .sc-eagle  .sc-mark { border-color: #14336b; }
+  }
+  :root[data-theme="light"] .sc-eagle   { background: rgba(50, 100, 200, 0.20); color: #14336b !important; }
+  :root[data-theme="light"] .sc-birdie  { background: rgba(74, 122, 63, 0.22); color: #2a4a1c !important; }
+  :root[data-theme="light"] .sc-bogey   { background: rgba(143, 108, 44, 0.14); color: #5a4210 !important; }
+  :root[data-theme="light"] .sc-double  { background: rgba(143, 58, 48, 0.20); color: #6b1a10 !important; }
+  :root[data-theme="light"] .sc-birdie .sc-mark { border-color: #4a7a3f; }
+  :root[data-theme="light"] .sc-eagle  .sc-mark { border-color: #14336b; }
+
+  /* Circles/squares tradition — birdie in circle, eagle double circle, bogey square, double sq. */
+  .sc-mark {
+    display: inline-block;
+    min-width: 20px;
+    padding: 1px 4px;
+  }
+  .sc-birdie .sc-mark { border-radius: 50%; border: 1px solid #6b9b4d; }
+  .sc-eagle .sc-mark  { border-radius: 50%; border: 2px double #a8c4ff; }
+  .sc-bogey .sc-mark  { border: 1px solid var(--gold-dim); border-radius: 2px; }
+  .sc-double .sc-mark { border: 1px solid var(--rough); border-radius: 2px; }
+
+  .sc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px 12px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--line);
+    background: var(--panel-2);
+  }
+  .sc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sc-legend i {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border-radius: 2px;
+  }
+  .sc-legend .l-birdie { background: rgba(107, 155, 77, 0.35); border-radius: 50%; border: 1px solid #6b9b4d; }
+  .sc-legend .l-eagle  { background: rgba(90, 140, 255, 0.35); border-radius: 50%; border: 2px double #a8c4ff; width: 12px; height: 12px; }
+  .sc-legend .l-bogey  { background: rgba(212, 160, 74, 0.28); border: 1px solid var(--gold-dim); }
+  .sc-legend .l-double { background: rgba(176, 74, 61, 0.4); border: 1px solid var(--rough); }
+
+  /* Detailed hole entry inside round form */
+  .rf-holes {
+    display: none;
+    margin-top: 8px;
+    padding: 10px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+  }
+  .rf-holes.open { display: block; }
+  .rf-holes-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 4px;
+  }
+  .rf-holes-grid .rf-h {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .rf-holes-grid label {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+  }
+  .rf-holes-grid input {
+    width: 100%;
+    text-align: center;
+    padding: 4px 2px !important;
+    font-family: var(--mono) !important;
+    font-size: 13px !important;
+  }
+  .rf-holes-sum {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .rf-holes-sum strong { color: var(--gold); font-family: var(--mono); font-size: 16px; }
+
+  .rf-hole-toggle {
+    background: transparent;
+    border: 1px dashed var(--line-strong);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: var(--body);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .rf-hole-toggle:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* ADMIN */
+  #admin-fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    z-index: 40;
+    transition: transform 0.15s, color 0.15s, border-color 0.15s;
+    font-family: var(--body);
+  }
+  #admin-fab:hover { color: var(--gold); border-color: var(--gold-dim); transform: translateY(-1px); }
+  #admin-fab.dirty::after {
+    content: "";
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 2px var(--panel);
+  }
+
+  #admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 50;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  #admin-overlay.open { display: flex; }
+  #admin-panel {
+    background: var(--ground);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    max-width: 640px;
+    width: 100%;
+    margin: 20px auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+  }
+  #admin-panel .ap-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--line);
+  }
+  #admin-panel .ap-head h2 {
+    font-family: var(--display);
+    font-size: 26px;
+    margin: 0;
+    color: var(--ink);
+  }
+  #admin-panel .ap-head .close {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 10px;
+    line-height: 1;
+  }
+  #admin-panel .ap-head .close:hover { color: var(--ink); }
+
+  #admin-panel .ap-body {
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .ap-section .ap-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .ap-section h3 {
+    font-family: var(--display);
+    font-size: 18px;
+    margin: 0;
+    color: var(--ink);
+  }
+  .ap-btn {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    padding: 8px 14px;
+    font-family: var(--body);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .ap-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .ap-btn.primary { background: var(--gold); color: #201709; border-color: var(--gold); font-weight: 700; }
+  .ap-btn.primary:hover { background: var(--warm); color: #201709; }
+  .ap-btn.danger { color: var(--rough); }
+  .ap-btn.danger:hover { border-color: var(--rough); color: var(--rough); }
+  .ap-btn.small { padding: 5px 10px; font-size: 11px; }
+  .ap-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .ap-round-list, .ap-player-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 8px;
+  }
+  .ap-round-item, .ap-player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--panel-2);
+    border-radius: 3px;
+    gap: 12px;
+  }
+  .ap-round-item .rl {
+    font-family: var(--body);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .ap-round-item .rl .rl-sub {
+    color: var(--muted);
+    font-size: 12px;
+    display: block;
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .ap-item-actions { display: flex; gap: 6px; }
+
+  .ap-player-item .pl-left {
+    display: flex; align-items: center; gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+  .ap-player-item .swatch {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--pc);
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);
+  }
+  .ap-player-item input.name-in {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 14px;
+    padding: 4px 0;
+    width: 100%;
+  }
+  .ap-player-item input.name-in:focus {
+    outline: none;
+    color: var(--gold);
+  }
+  .ap-player-item input.color-in {
+    width: 34px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  /* Round editor form */
+  #round-form {
+    background: var(--panel);
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 16px;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+  }
+  #round-form.open { display: flex; }
+  #round-form .rf-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  #round-form label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+  #round-form input[type="date"],
+  #round-form input[type="number"],
+  #round-form select {
+    background: var(--panel-2);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    padding: 8px 10px;
+    font-family: var(--body);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  #round-form input:focus, #round-form select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  #round-form .rf-pair {
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr 90px auto;
+    gap: 8px;
+    align-items: center;
+  }
+  #round-form .rf-pair .plus-sm {
+    color: var(--muted);
+    font-family: var(--display);
+    font-size: 20px;
+    text-align: center;
+  }
+  #round-form .rf-pair .del-pair {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+  }
+  #round-form .rf-pair .del-pair:hover { color: var(--rough); }
+  #round-form .rf-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  #round-form .rf-actions .right { display: flex; gap: 8px; }
+
+  .ap-note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .ap-note strong { color: var(--gold); }
+
+  .ap-actions-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ap-export {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 10px;
+    border-radius: 3px;
+    resize: vertical;
+    min-height: 100px;
+    display: none;
+  }
+  .ap-export.open { display: block; }
+
+  .ap-toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: #201709;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 3px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .ap-toast.show { opacity: 1; }
+
+  @media (max-width: 480px) {
+    .row { grid-template-columns: 26px 1fr auto; padding: 12px 14px; gap: 10px; }
+    .row .played { display: none; }
+    .stat .n { font-size: 18px; }
+    .avatar { width: 32px; height: 32px; font-size: 14px; }
+    .hero .meta { gap: 20px; }
+    .matrix { grid-template-columns: 36px repeat(6, 1fr); }
+    .m-head, .m-side { height: 36px; font-size: 12px; }
+    .m-head .mini-av { width: 26px; height: 26px; font-size: 11px; }
+    .cell .score { font-size: 15px; }
+    .cell .times { font-size: 8px; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="hero">
+    <div class="eyebrow">Mulgimaffia Scramble · Suvi 2026</div>
+    <h1>Scramble <em>Cup</em></h1>
+    <div class="rule"></div>
+    <div class="meta">
+      <div><span class="num" id="ring-current">1</span><span class="lbl">Ring / 5</span></div>
+      <div><span class="num" id="pott">€600</span><span class="lbl">Auhinnapott</span></div>
+      <div><span class="num" id="mangijaid">6</span><span class="lbl">Mängijat</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="eyebrow">§ 01</div>
+    <h2>Edetabel</h2>
+    <div class="board" id="board"></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">§ 02</div>
+    <h2>Kes kellega?</h2>
+    <div class="matrix-wrap">
+      <div class="matrix" id="matrix"></div>
+      <div class="legend">
+        <span><i style="background:var(--gold)"></i>Kuum (≤74)</span>
+        <span><i style="background:var(--fairway)"></i>Soe (75–77)</span>
+        <span><i style="background:var(--cool)"></i>Jahe (78–79)</span>
+        <span><i style="background:var(--rough)"></i>Külm (80+)</span>
+        <span><i style="background:transparent; border:1px dashed var(--line-strong)"></i>Testimata</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">§ 03</div>
+    <h2>Mängijate ringid</h2>
+    <div id="rounds"></div>
+  </section>
+
+  <section>
+    <details class="rules">
+      <summary>Reeglid & auhinnad</summary>
+      <div class="body">
+
+        <div>
+          <h3>Formaat</h3>
+          <ul>
+            <li><strong>2-man Scramble.</strong> Mõlemad paarilised löövad ava, valivad parema palli, mängivad edasi vaheldumisi.</li>
+            <li><strong>Kollased tiid</strong> (BREAM, par 72).</li>
+            <li><strong>Mulligani ei ole.</strong></li>
+            <li><strong>1 driveri ülatuses</strong> tohib asetada, mitte lähemale lipule — aga <strong>mänguväljaku osa ei tohi parendada</strong>. Roughist fairwayle ega vastupidi ei tohi asetada.</li>
+            <li><strong>5 avalööki</strong> peab kumbki paariline ringis andma.</li>
+            <li>Sama paarilisega tohib uuesti mängida.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Võitja</h3>
+          <ul>
+            <li>Väikseim <strong>löökide arv 5 ringi kokku</strong>.</li>
+            <li><strong>Viigi korral</strong> (võrdne skoor 5 ringi lõpetuseks) võidab see, kellel on rohkem madalama tulemusega ringe.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Erireeglid</h3>
+          <ul>
+            <li><strong>Kui ühel paaril jääb ring mängimata:</strong> mõlema paarilise individuaalne keskmine (kokkuvõte ÷ mängitud ringide arv), need liidetakse ja jagatakse kahega — sealt tuleb selle ringi tulemus.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Buy-in & auhinnad</h3>
+          <ul>
+            <li><strong>Buy-in:</strong> 100 € mängija kohta. Võitja teeb välja <strong>saunapeo</strong> koos õllede ja snäkkidega.</li>
+          </ul>
+          <table class="prize-table" id="prize-table">
+            <thead>
+              <tr><th>Mängijaid</th><th>1. koht</th><th>2. koht</th></tr>
+            </thead>
+            <tbody>
+              <tr data-n="4"><td>4</td><td>€300</td><td>€100</td></tr>
+              <tr data-n="5"><td>5</td><td>€350</td><td>€150</td></tr>
+              <tr data-n="6"><td>6</td><td>€400</td><td>€200</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    Scramble Cup 2026 <span class="swords">⚔</span> Pärnu Bay Golf Links
+  </footer>
+</div>
+
+<button id="admin-fab" title="Admin režiim" aria-label="Admin režiim">⚙</button>
+
+<div id="admin-overlay" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+  <div id="admin-panel">
+    <div class="ap-head">
+      <h2 id="admin-title">Admin</h2>
+      <button class="close" id="admin-close" aria-label="Sulge">×</button>
+    </div>
+    <div class="ap-body">
+
+      <div class="ap-section">
+        <div class="ap-title">
+          <h3>Ringid</h3>
+          <button class="ap-btn primary small" id="add-round">+ Uus ring</button>
+        </div>
+
+        <form id="round-form" onsubmit="return false;">
+          <div class="rf-row">
+            <div>
+              <label>Ringi nr</label>
+              <input type="number" id="rf-id" min="1" step="1" style="width: 70px">
+            </div>
+            <div>
+              <label>Kuupäev</label>
+              <input type="date" id="rf-date">
+            </div>
+          </div>
+
+          <div>
+            <label>Paarid</label>
+            <div id="rf-pairs"></div>
+            <button class="ap-btn small" id="rf-add-pair" type="button" style="margin-top: 8px">+ Lisa paar</button>
+          </div>
+
+          <div class="rf-actions">
+            <button class="ap-btn danger" id="rf-cancel" type="button">Tühista</button>
+            <div class="right">
+              <button class="ap-btn primary" id="rf-save" type="button">Salvesta ring</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="ap-round-list" id="round-list"></div>
+      </div>
+
+      <div class="ap-section">
+        <div class="ap-title"><h3>Mängijad</h3></div>
+        <div class="ap-player-list" id="player-list"></div>
+        <p class="ap-note" style="margin-top: 8px">Nime muutmine uuendab kõik ringid, kus mängija esineb.</p>
+      </div>
+
+      <div class="ap-section">
+        <div class="ap-title"><h3>Andmed</h3></div>
+        <div class="ap-actions-bar">
+          <button class="ap-btn" id="export-json">Kopeeri Marttile</button>
+          <button class="ap-btn" id="show-json">Näita JSON</button>
+          <button class="ap-btn danger" id="reset-data">Lähtesta serveri andmetega</button>
+        </div>
+        <textarea class="ap-export" id="json-out" readonly></textarea>
+        <p class="ap-note" style="margin-top: 10px">
+          <strong>Kohalik režiim:</strong> muudatused salvestuvad ainult sinu brauserisse — teised näevad "ametlikku" versiooni mida Martti publishis.
+          Et grupp muudatused näeks: kliki <strong>Kopeeri Marttile</strong>, saada Marttile ja tema uuendab lehe.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="ap-toast" id="toast"></div>
+
+<script id="tournament-data" type="application/json">
+{
+  "tournament": "Scramble Cup 2026",
+  "total_rounds": 5,
+  "course": {
+    "name": "Pärnu Bay Golf Links",
+    "tee": "BREAM (Kollane)",
+    "par":      [5, 3, 5, 3, 4, 4, 5, 4, 4,  5, 3, 4, 4, 3, 4, 4, 3, 5],
+    "si":       [5, 13, 1, 17, 3, 11, 7, 15, 9,  2, 4, 8, 18, 16, 12, 10, 14, 6],
+    "distance": [438, 130, 474, 155, 362, 342, 429, 300, 340,  498, 169, 346, 294, 130, 260, 299, 158, 454]
+  },
+  "players": [
+    { "name": "Martti", "color": "#4fb3a9", "initial": "M" },
+    { "name": "Vahur",  "color": "#d69a3c", "initial": "V" },
+    { "name": "Priit",  "color": "#c96a4d", "initial": "P" },
+    { "name": "Andrus", "color": "#9a7bc8", "initial": "A" },
+    { "name": "Silver", "color": "#b8bcc0", "initial": "S" },
+    { "name": "Romet",  "color": "#a3453f", "initial": "R" }
+  ],
+  "rounds": [
+    {
+      "id": 1,
+      "date": "2026-08-05",
+      "pairs": [
+        {
+          "players": ["Martti", "Priit"],
+          "score": 72,
+          "holes":  [5, 4, 5, 3, 5, 4, 4, 4, 4,  6, 3, 4, 4, 3, 3, 4, 2, 5]
+        },
+        {
+          "players": ["Vahur", "Andrus"],
+          "score": 80,
+          "holes":  [5, 3, 6, 3, 5, 5, 5, 4, 4,  6, 4, 4, 5, 3, 4, 5, 4, 5]
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'scramble-cup-2026-data';
+  const monthNames = ['jaan','veebr','märts','apr','mai','juuni','juuli','aug','sept','okt','nov','dets'];
+  const potMap  = { 4: 400, 5: 500, 6: 600 };
+  const prizeMap = { 4: [300,100], 5: [350,150], 6: [400,200] };
+
+  const serverData = JSON.parse(document.getElementById('tournament-data').textContent);
+  let data = loadData();
+  let editingRoundId = null; // null = new, number = existing id
+
+  function loadData () {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* fall through */ }
+    return structuredClone(serverData);
+  }
+  function saveData () {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      document.getElementById('admin-fab').classList.add('dirty');
+    } catch (e) {
+      toast('Salvestamine ebaõnnestus');
+    }
+  }
+  function resetData () {
+    localStorage.removeItem(STORAGE_KEY);
+    data = structuredClone(serverData);
+    document.getElementById('admin-fab').classList.remove('dirty');
+  }
+
+  function pairKey (a, b) { return [a, b].sort().join('|'); }
+  function heatClass (avg) {
+    if (avg <= 74) return 'hot';
+    if (avg <= 77) return 'warm';
+    if (avg <= 79) return 'cool';
+    return 'cold';
+  }
+  function fmtDate (iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d)) return iso;
+    return `${d.getDate()}. ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+  }
+  function todayIso () {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+  function toast (msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  // ─── RENDER ────────────────────────────────────────────
+  function render () {
+    const players = data.players;
+    const rounds  = data.rounds;
+    const TOTAL   = data.total_rounds;
+    const N       = players.length;
+    const byName  = Object.fromEntries(players.map(p => [p.name, p]));
+
+    // ── per-player stats
+    const stats = {};
+    players.forEach(p => stats[p.name] = {
+      name: p.name, color: p.color, total: 0, played: 0, best: null, scores: []
+    });
+    rounds.forEach(r => r.pairs.forEach(pair => pair.players.forEach(pn => {
+      const s = stats[pn]; if (!s) return;
+      s.total += pair.score;
+      s.played += 1;
+      s.scores.push(pair.score);
+      if (s.best === null || pair.score < s.best) s.best = pair.score;
+    })));
+
+    // ── hero
+    document.getElementById('ring-current').textContent = rounds.length || 0;
+    document.getElementById('pott').textContent = '€' + (potMap[N] || N * 100);
+    document.getElementById('mangijaid').textContent = N;
+
+    // ── prize table highlight
+    const pt = document.getElementById('prize-table');
+    pt.querySelectorAll('tr.current').forEach(r => r.classList.remove('current'));
+    const currentRow = pt.querySelector(`tr[data-n="${N}"]`);
+    if (currentRow) currentRow.classList.add('current');
+
+    // ── leaderboard
+    const ranked = Object.values(stats).slice().sort((a, b) => {
+      if (a.played === 0 && b.played === 0) return 0;
+      if (a.played === 0) return 1;
+      if (b.played === 0) return -1;
+      if (a.total !== b.total) return a.total - b.total;
+      if (a.played !== b.played) return b.played - a.played;
+      return (a.best || 999) - (b.best || 999);
+    });
+
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+    const maxTotal = Math.max(...ranked.map(s => s.total || 0), 1);
+    const playedCount = ranked.filter(x => x.played > 0).length;
+
+    ranked.forEach((s, i) => {
+      const isLeader = i === 0 && s.played > 0;
+      const isLast   = i === ranked.length - 1 && s.played > 0 && playedCount > 1;
+      const dotHtml  = Array.from({length: TOTAL}, (_, k) =>
+        `<span class="dot ${k < s.played ? 'on' : ''}"></span>`).join('');
+      const barW     = s.played > 0 ? (s.total / maxTotal) * 100 : 0;
+
+      const row = document.createElement('div');
+      row.className = 'row' + (isLeader ? ' rank-1' : '') + (isLast ? ' last' : '');
+      row.innerHTML = `
+        <div class="rank">${i + 1}</div>
+        <div class="who">
+          <div class="avatar" style="--pc: ${s.color}">${s.name[0]}</div>
+          <div>
+            <div class="name">${escapeHtml(s.name)}${
+              isLast ? '<span class="badge hot">Saunaisa</span>' : ''
+            }</div>
+          </div>
+        </div>
+        <div class="played">
+          <div class="dots">${dotHtml}</div>
+          <div style="font-size:10px; color:var(--muted); letter-spacing:0.14em; text-transform:uppercase;">
+            ${s.played}/${TOTAL}
+          </div>
+        </div>
+        <div class="stat">
+          <div class="n">${s.played > 0 ? s.total : '—'}</div>
+          <div class="l">Lööki</div>
+        </div>
+        <div class="bar" style="--pc: ${s.color}; width: ${barW}%"></div>
+      `;
+      board.appendChild(row);
+    });
+
+    // ── matrix
+    const matrix = document.getElementById('matrix');
+    matrix.innerHTML = '';
+    const corner = document.createElement('div');
+    corner.className = 'm-side';
+    corner.innerHTML = '<span style="color:var(--muted); font-size:14px;">⚔</span>';
+    matrix.appendChild(corner);
+    players.forEach(p => {
+      const h = document.createElement('div');
+      h.className = 'm-head';
+      h.innerHTML = `<div class="mini-av" style="--pc: ${p.color}">${p.initial || p.name[0]}</div>`;
+      matrix.appendChild(h);
+    });
+    const pairStats = {};
+    rounds.forEach(r => r.pairs.forEach(pair => {
+      const [a, b] = pair.players;
+      const k = pairKey(a, b);
+      if (!pairStats[k]) pairStats[k] = { scores: [], count: 0, best: null };
+      pairStats[k].scores.push(pair.score);
+      pairStats[k].count += 1;
+      if (pairStats[k].best === null || pair.score < pairStats[k].best) pairStats[k].best = pair.score;
+    }));
+
+    // Update dynamic matrix subtitle
+    const totalPairs = N * (N - 1) / 2;
+    const testedPairs = Object.keys(pairStats).length;
+    const sub = document.getElementById('matrix-sub');
+    if (sub) sub.textContent = `${testedPairs} / ${totalPairs} duot katsetatud`;
+    players.forEach(rowP => {
+      const side = document.createElement('div');
+      side.className = 'm-side';
+      side.innerHTML = `<div class="mini-av" style="--pc: ${rowP.color}">${rowP.initial || rowP.name[0]}</div>`;
+      matrix.appendChild(side);
+      players.forEach(colP => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        if (rowP.name === colP.name) {
+          cell.classList.add('self');
+        } else {
+          const ps = pairStats[pairKey(rowP.name, colP.name)];
+          if (!ps) cell.classList.add('untested');
+          else {
+            const avg = ps.scores.reduce((a, b) => a + b, 0) / ps.scores.length;
+            cell.classList.add(heatClass(avg));
+            cell.innerHTML = `<div class="score">${ps.best}</div><div class="times">${ps.count}×</div>`;
+          }
+        }
+        matrix.appendChild(cell);
+      });
+    });
+
+    // ── per-player view
+    const roundsEl = document.getElementById('rounds');
+    roundsEl.innerHTML = '';
+
+    // Build pair-results lookup
+    const pairResults = {};
+    rounds.forEach(r => r.pairs.forEach(pair => {
+      const k = pairKey(pair.players[0], pair.players[1]);
+      pairResults[k] = {
+        score: pair.score,
+        holes: pair.holes,
+        date: r.date,
+        roundId: r.id,
+        pair
+      };
+    }));
+
+    players.forEach(p => {
+      const partners = players.filter(x => x.name !== p.name);
+      const rows = partners.map(partner => ({
+        partner,
+        result: pairResults[pairKey(p.name, partner.name)]
+      }));
+      // sort: played first (by date asc, then score), pending alphabetically
+      rows.sort((a, b) => {
+        if (a.result && !b.result) return -1;
+        if (!a.result && b.result) return 1;
+        if (a.result && b.result) {
+          const dc = a.result.date.localeCompare(b.result.date);
+          if (dc !== 0) return dc;
+          return a.result.score - b.result.score;
+        }
+        return a.partner.name.localeCompare(b.partner.name);
+      });
+
+      const playedRows = rows.filter(r => r.result);
+      const total = playedRows.reduce((s, r) => s + r.result.score, 0);
+      const bestScore = playedRows.length ? Math.min(...playedRows.map(r => r.result.score)) : null;
+
+      const rowsHtml = rows.map(({partner, result}) => {
+        if (result) {
+          const isBest = result.score === bestScore && playedRows.length > 1;
+          const hasHoles = Array.isArray(result.holes) && result.holes.length === 18 && data.course;
+          const scHtml = hasHoles ? renderPairScorecardBody(result.pair, byName) : '';
+          return `
+            <div class="p-round-row ${isBest ? 'best' : ''} ${hasHoles ? 'expandable' : ''}">
+              <button class="p-plus" type="button" ${hasHoles ? 'title="Ava skoorikaart"' : 'tabindex="-1"'}>+</button>
+              <span class="partner"><span class="dot-sm" style="--pc:${partner.color}"></span>${escapeHtml(partner.name)}</span>
+              <div style="text-align:right;">
+                <div class="p-score">${result.score}</div>
+                <div class="p-date">${fmtDate(result.date)}</div>
+              </div>
+            </div>
+            ${scHtml ? `<div class="p-sc-slot">${scHtml}</div>` : ''}`;
+        } else {
+          return `
+            <div class="p-round-row pending">
+              <button class="p-plus" type="button" tabindex="-1">−</button>
+              <span class="partner"><span class="dot-sm" style="--pc:${partner.color}"></span>${escapeHtml(partner.name)}</span>
+              <span class="pending-tag">Mängimata</span>
+            </div>`;
+        }
+      }).join('');
+
+      const card = document.createElement('div');
+      card.className = 'player-card';
+      card.innerHTML = `
+        <div class="player-head">
+          <div class="p-av" style="--pc:${p.color}">${p.initial || p.name[0]}</div>
+          <div>
+            <div class="p-name">${escapeHtml(p.name)}</div>
+            <div class="p-sub">${playedRows.length} / ${TOTAL} mängitud</div>
+          </div>
+          <div class="p-total">
+            <span class="n">${playedRows.length ? total : '—'}</span>
+            <span class="l">Lööki</span>
+          </div>
+        </div>
+        <div class="p-rounds">${rowsHtml}</div>`;
+
+      // Wire scorecard toggles
+      card.querySelectorAll('.p-round-row.expandable').forEach(row => {
+        const btn = row.querySelector('.p-plus');
+        const slot = row.nextElementSibling; // .p-sc-slot
+        if (!btn || !slot || !slot.classList.contains('p-sc-slot')) return;
+        btn.addEventListener('click', () => {
+          const open = slot.classList.toggle('open');
+          row.classList.toggle('open', open);
+        });
+      });
+
+      roundsEl.appendChild(card);
+    });
+  }
+
+  function renderPairScorecardBody (pair, byName) {
+    const course = data.course;
+    if (!course || !Array.isArray(pair.holes) || pair.holes.length !== 18) return '';
+    const par = course.par;
+    const [a, b] = pair.players;
+    const pa = byName[a], pb = byName[b];
+    const label = pa && pb ? `${pa.initial || pa.name[0]}+${pb.initial || pb.name[0]}` : '?';
+    const outSum = pair.holes.slice(0, 9).reduce((s, x) => s + (x || 0), 0);
+    const inSum  = pair.holes.slice(9).reduce((s, x) => s + (x || 0), 0);
+    const outPar = par.slice(0, 9).reduce((s, x) => s + x, 0);
+    const inPar  = par.slice(9).reduce((s, x) => s + x, 0);
+    const totPar = outPar + inPar;
+
+    let head = `<tr><th class="sc-label">Auk</th>`;
+    for (let i = 0; i < 9; i++) head += `<th>${i + 1}</th>`;
+    head += `<th class="sep">OUT</th>`;
+    for (let i = 9; i < 18; i++) head += `<th>${i + 1}</th>`;
+    head += `<th class="sep">IN</th><th class="sep">TOT</th></tr>`;
+
+    let parRow = `<tr class="sc-par-row"><td class="sc-label">Par <span class="sc-sub">${course.tee || ''}</span></td>`;
+    par.slice(0, 9).forEach(p => parRow += `<td>${p}</td>`);
+    parRow += `<td class="sep">${outPar}</td>`;
+    par.slice(9).forEach(p => parRow += `<td>${p}</td>`);
+    parRow += `<td class="sep">${inPar}</td><td class="sep">${totPar}</td></tr>`;
+
+    let scoreRow = `<tr class="sc-score-row"><td class="sc-label">${escapeHtml(label)} <span class="sc-sub">${pair.score}</span></td>`;
+    pair.holes.slice(0, 9).forEach((s, i) => {
+      const cls = scoreClass(s, par[i]);
+      scoreRow += `<td class="${cls}"><span class="sc-mark">${s}</span></td>`;
+    });
+    scoreRow += `<td class="sep">${outSum}</td>`;
+    pair.holes.slice(9).forEach((s, i) => {
+      const cls = scoreClass(s, par[i + 9]);
+      scoreRow += `<td class="${cls}"><span class="sc-mark">${s}</span></td>`;
+    });
+    scoreRow += `<td class="sep">${inSum}</td><td class="sep">${outSum + inSum}</td></tr>`;
+
+    return `
+      <div class="scorecard">
+        <table class="sc-table">
+          <thead>${head}</thead>
+          <tbody>${parRow}${scoreRow}</tbody>
+        </table>
+        <div class="sc-legend">
+          <span><i class="l-eagle"></i>Eagle</span>
+          <span><i class="l-birdie"></i>Birdie</span>
+          <span><i class="l-bogey"></i>Bogey</span>
+          <span><i class="l-double"></i>2+ Bogey</span>
+        </div>
+      </div>`;
+  }
+
+  function scoreClass (score, par) {
+    if (!score || !par) return '';
+    const diff = score - par;
+    if (diff <= -2) return 'sc-eagle';
+    if (diff === -1) return 'sc-birdie';
+    if (diff === 1) return 'sc-bogey';
+    if (diff >= 2) return 'sc-double';
+    return '';
+  }
+
+  function renderScorecard (round, byName) {
+    const course = data.course;
+    if (!course) return '';
+    const par = course.par;
+    const dist = course.distance || [];
+
+    // Header row
+    const holeHeaders = par.map((_, i) => `<th>${i + 1}</th>`).join('');
+    const outPar = par.slice(0, 9).reduce((a, b) => a + b, 0);
+    const inPar  = par.slice(9).reduce((a, b) => a + b, 0);
+    const totPar = outPar + inPar;
+
+    const outDist = dist.slice(0, 9).reduce((a, b) => a + b, 0);
+    const inDist  = dist.slice(9).reduce((a, b) => a + b, 0);
+
+    // Split rendering: front 9 + OUT | back 9 + IN + TOT
+    let head = `<tr><th class="sc-label">Auk</th>`;
+    for (let i = 0; i < 9; i++) head += `<th>${i + 1}</th>`;
+    head += `<th class="sep">OUT</th>`;
+    for (let i = 9; i < 18; i++) head += `<th>${i + 1}</th>`;
+    head += `<th class="sep">IN</th><th class="sep">TOT</th></tr>`;
+
+    let parRow = `<tr class="sc-par-row"><td class="sc-label">Par <span class="sc-sub">${course.tee || ''}</span></td>`;
+    par.slice(0, 9).forEach(p => parRow += `<td>${p}</td>`);
+    parRow += `<td class="sep">${outPar}</td>`;
+    par.slice(9).forEach(p => parRow += `<td>${p}</td>`);
+    parRow += `<td class="sep">${inPar}</td><td class="sep">${totPar}</td></tr>`;
+
+    let distRow = '';
+    if (dist.length === 18) {
+      distRow = `<tr class="sc-dist-row"><td class="sc-label">Meetrit</td>`;
+      dist.slice(0, 9).forEach(d => distRow += `<td>${d}</td>`);
+      distRow += `<td class="sep">${outDist}</td>`;
+      dist.slice(9).forEach(d => distRow += `<td>${d}</td>`);
+      distRow += `<td class="sep">${inDist}</td><td class="sep">${outDist + inDist}</td></tr>`;
+    }
+
+    // Score rows
+    const scoreRows = round.pairs.map(pair => {
+      if (!Array.isArray(pair.holes) || pair.holes.length !== 18) return '';
+      const [a, b] = pair.players;
+      const pa = byName[a], pb = byName[b];
+      const label = pa && pb ? `${pa.initial || pa.name[0]}+${pb.initial || pb.name[0]}` : '?';
+      const outSum = pair.holes.slice(0, 9).reduce((s, x) => s + (x || 0), 0);
+      const inSum  = pair.holes.slice(9).reduce((s, x) => s + (x || 0), 0);
+
+      let row = `<tr class="sc-score-row"><td class="sc-label">${escapeHtml(label)} <span class="sc-sub">${pair.score}</span></td>`;
+      pair.holes.slice(0, 9).forEach((s, i) => {
+        const cls = scoreClass(s, par[i]);
+        row += `<td class="${cls}"><span class="sc-mark">${s}</span></td>`;
+      });
+      row += `<td class="sep">${outSum}</td>`;
+      pair.holes.slice(9).forEach((s, i) => {
+        const cls = scoreClass(s, par[i + 9]);
+        row += `<td class="${cls}"><span class="sc-mark">${s}</span></td>`;
+      });
+      row += `<td class="sep">${inSum}</td><td class="sep">${outSum + inSum}</td></tr>`;
+      return row;
+    }).join('');
+
+    return `
+      <button class="sc-toggle" type="button">
+        <span>⛳ Kliki, et näha skoorikaarti</span>
+        <span class="caret">▾</span>
+      </button>
+      <div class="scorecard">
+        <table class="sc-table">
+          <thead>${head}</thead>
+          <tbody>${parRow}${distRow}${scoreRows}</tbody>
+        </table>
+        <div class="sc-legend">
+          <span><i class="l-eagle"></i>Eagle</span>
+          <span><i class="l-birdie"></i>Birdie</span>
+          <span><i class="l-bogey"></i>Bogey</span>
+          <span><i class="l-double"></i>2+ Bogey</span>
+        </div>
+      </div>`;
+  }
+
+  function escapeHtml (s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  // ─── ADMIN ─────────────────────────────────────────────
+  const overlay   = document.getElementById('admin-overlay');
+  const fab       = document.getElementById('admin-fab');
+  const roundForm = document.getElementById('round-form');
+
+  fab.addEventListener('click', () => {
+    renderAdmin();
+    overlay.classList.add('open');
+  });
+  document.getElementById('admin-close').addEventListener('click', () => {
+    overlay.classList.remove('open');
+    closeRoundForm();
+  });
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      closeRoundForm();
+    }
+  });
+
+  // check for dirty (localStorage differs from server)
+  if (localStorage.getItem(STORAGE_KEY)) fab.classList.add('dirty');
+
+  function renderAdmin () {
+    // round list
+    const rl = document.getElementById('round-list');
+    rl.innerHTML = '';
+    if (!data.rounds.length) {
+      rl.innerHTML = `<div style="padding:14px; color:var(--muted); text-align:center; font-size:13px;">
+        Ühtki ringi veel salvestatud.
+      </div>`;
+    }
+    data.rounds.slice().sort((a, b) => b.id - a.id).forEach(r => {
+      const item = document.createElement('div');
+      item.className = 'ap-round-item';
+      const pairsSummary = r.pairs.map(p => `${p.players.join('+')} ${p.score}`).join(' · ');
+      item.innerHTML = `
+        <div class="rl">
+          <strong>Ring ${r.id}</strong> · ${fmtDate(r.date)}
+          <span class="rl-sub">${escapeHtml(pairsSummary)}</span>
+        </div>
+        <div class="ap-item-actions">
+          <button class="ap-btn small" data-edit="${r.id}">Muuda</button>
+          <button class="ap-btn small danger" data-del="${r.id}">Kustuta</button>
+        </div>`;
+      rl.appendChild(item);
+    });
+    rl.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click',
+      () => openRoundForm(parseInt(b.dataset.edit, 10))));
+    rl.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click',
+      () => deleteRound(parseInt(b.dataset.del, 10))));
+
+    // player list
+    const pl = document.getElementById('player-list');
+    pl.innerHTML = '';
+    data.players.forEach((p, idx) => {
+      const item = document.createElement('div');
+      item.className = 'ap-player-item';
+      item.innerHTML = `
+        <div class="pl-left">
+          <div class="swatch" style="--pc:${p.color}"></div>
+          <input class="name-in" type="text" value="${escapeHtml(p.name)}" data-idx="${idx}" data-field="name">
+        </div>
+        <input class="color-in" type="color" value="${p.color}" data-idx="${idx}" data-field="color">`;
+      pl.appendChild(item);
+    });
+    pl.querySelectorAll('.name-in').forEach(inp => inp.addEventListener('change', e => {
+      const idx = parseInt(e.target.dataset.idx, 10);
+      const oldName = data.players[idx].name;
+      const newName = e.target.value.trim();
+      if (!newName || newName === oldName) { e.target.value = oldName; return; }
+      if (data.players.some((p, i) => i !== idx && p.name === newName)) {
+        toast('Nimi juba olemas'); e.target.value = oldName; return;
+      }
+      data.players[idx].name = newName;
+      data.players[idx].initial = newName[0];
+      // cascade to rounds
+      data.rounds.forEach(r => r.pairs.forEach(pair => {
+        pair.players = pair.players.map(n => n === oldName ? newName : n);
+      }));
+      saveData(); render();
+    }));
+    pl.querySelectorAll('.color-in').forEach(inp => inp.addEventListener('change', e => {
+      const idx = parseInt(e.target.dataset.idx, 10);
+      data.players[idx].color = e.target.value;
+      const swatch = e.target.parentElement.querySelector('.swatch');
+      if (swatch) swatch.style.setProperty('--pc', e.target.value);
+      saveData(); render();
+    }));
+  }
+
+  // ─── round form ─────
+  document.getElementById('add-round').addEventListener('click', () => openRoundForm(null));
+  document.getElementById('rf-cancel').addEventListener('click', closeRoundForm);
+  document.getElementById('rf-save').addEventListener('click', saveRoundForm);
+  document.getElementById('rf-add-pair').addEventListener('click', () => addPairRow());
+
+  function openRoundForm (id) {
+    editingRoundId = id;
+    const isNew = id === null;
+    document.getElementById('rf-pairs').innerHTML = '';
+
+    if (isNew) {
+      document.getElementById('rf-id').value = nextRoundId();
+      document.getElementById('rf-date').value = todayIso();
+      addPairRow(); addPairRow();
+    } else {
+      const r = data.rounds.find(r => r.id === id);
+      if (!r) return;
+      document.getElementById('rf-id').value = r.id;
+      document.getElementById('rf-date').value = r.date;
+      r.pairs.forEach(p => addPairRow(p.players[0], p.players[1], p.score, p.holes));
+    }
+    roundForm.classList.add('open');
+    roundForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function closeRoundForm () {
+    roundForm.classList.remove('open');
+    editingRoundId = null;
+  }
+
+  function nextRoundId () {
+    if (!data.rounds.length) return 1;
+    return Math.max(...data.rounds.map(r => r.id)) + 1;
+  }
+
+  function playerOptions (selected) {
+    return data.players.map(p =>
+      `<option value="${escapeHtml(p.name)}" ${p.name === selected ? 'selected' : ''}>${escapeHtml(p.name)}</option>`
+    ).join('');
+  }
+
+  function addPairRow (a = '', b = '', score = '', holes = null) {
+    const wrap = document.createElement('div');
+    wrap.className = 'rf-pair-block';
+
+    const hasHoles = Array.isArray(holes) && holes.length === 18;
+
+    wrap.innerHTML = `
+      <div class="rf-pair">
+        <select class="p1"><option value="">— vali —</option>${playerOptions(a)}</select>
+        <span class="plus-sm">+</span>
+        <select class="p2"><option value="">— vali —</option>${playerOptions(b)}</select>
+        <input type="number" class="sc" min="30" max="200" placeholder="skoor" value="${score}" ${hasHoles ? 'readonly' : ''}>
+        <button type="button" class="del-pair" title="Kustuta paar">×</button>
+      </div>
+      <button type="button" class="rf-hole-toggle">${hasHoles ? '▾' : '▸'} 18 augu skoorid</button>
+      <div class="rf-holes ${hasHoles ? 'open' : ''}">
+        <div class="rf-holes-grid rf-out">${
+          Array.from({length: 9}, (_, i) => `
+            <div class="rf-h">
+              <label>${i + 1}</label>
+              <input type="number" min="1" max="15" class="rf-hole-in" data-i="${i}" value="${hasHoles ? holes[i] : ''}">
+            </div>`).join('')
+        }</div>
+        <div style="height:8px"></div>
+        <div class="rf-holes-grid rf-in">${
+          Array.from({length: 9}, (_, i) => `
+            <div class="rf-h">
+              <label>${i + 10}</label>
+              <input type="number" min="1" max="15" class="rf-hole-in" data-i="${i + 9}" value="${hasHoles ? holes[i + 9] : ''}">
+            </div>`).join('')
+        }</div>
+        <div class="rf-holes-sum">
+          <span>OUT <span class="s-out">–</span> · IN <span class="s-in">–</span></span>
+          <span>Kokku: <strong class="s-tot">–</strong></span>
+        </div>
+      </div>`;
+
+    wrap.querySelector('.del-pair').addEventListener('click', () => wrap.remove());
+
+    const toggle = wrap.querySelector('.rf-hole-toggle');
+    const holesEl = wrap.querySelector('.rf-holes');
+    const scInput = wrap.querySelector('.sc');
+    toggle.addEventListener('click', () => {
+      const open = holesEl.classList.toggle('open');
+      toggle.textContent = (open ? '▾' : '▸') + ' 18 augu skoorid';
+      scInput.readOnly = open && anyHoleFilled(wrap);
+      if (open) recalcHoleSum(wrap);
+    });
+
+    wrap.querySelectorAll('.rf-hole-in').forEach(inp => {
+      inp.addEventListener('input', () => {
+        recalcHoleSum(wrap);
+        const any = anyHoleFilled(wrap);
+        scInput.readOnly = any;
+        if (any) {
+          const total = totalFromHoles(wrap);
+          if (total > 0) scInput.value = total;
+        }
+      });
+    });
+
+    if (hasHoles) recalcHoleSum(wrap);
+    document.getElementById('rf-pairs').appendChild(wrap);
+  }
+
+  function anyHoleFilled (wrap) {
+    return Array.from(wrap.querySelectorAll('.rf-hole-in')).some(i => i.value !== '');
+  }
+  function totalFromHoles (wrap) {
+    return Array.from(wrap.querySelectorAll('.rf-hole-in'))
+      .reduce((s, i) => s + (parseInt(i.value, 10) || 0), 0);
+  }
+  function recalcHoleSum (wrap) {
+    const vals = Array.from(wrap.querySelectorAll('.rf-hole-in'))
+      .map(i => parseInt(i.value, 10) || 0);
+    const out = vals.slice(0, 9).reduce((a, b) => a + b, 0);
+    const inn = vals.slice(9).reduce((a, b) => a + b, 0);
+    wrap.querySelector('.s-out').textContent = out || '–';
+    wrap.querySelector('.s-in').textContent  = inn || '–';
+    wrap.querySelector('.s-tot').textContent = (out + inn) || '–';
+  }
+
+  function saveRoundForm () {
+    const id = parseInt(document.getElementById('rf-id').value, 10);
+    const date = document.getElementById('rf-date').value;
+    if (!id || !date) { toast('Ringi nr ja kuupäev vaja'); return; }
+
+    const pairEls = document.querySelectorAll('#rf-pairs .rf-pair-block');
+    const pairs = [];
+    const usedPlayers = new Set();
+    for (const el of pairEls) {
+      const p1 = el.querySelector('.p1').value;
+      const p2 = el.querySelector('.p2').value;
+      const sc = parseInt(el.querySelector('.sc').value, 10);
+      if (!p1 && !p2 && !sc) continue; // empty row, skip
+      if (!p1 || !p2 || !sc) { toast('Iga paar vajab 2 mängijat ja skoori'); return; }
+      if (p1 === p2) { toast('Paaris peavad olema erinevad mängijad'); return; }
+      if (usedPlayers.has(p1) || usedPlayers.has(p2)) {
+        toast(`${usedPlayers.has(p1) ? p1 : p2} on juba selles ringis`); return;
+      }
+      usedPlayers.add(p1); usedPlayers.add(p2);
+
+      // Collect hole scores if any filled
+      const holeInputs = Array.from(el.querySelectorAll('.rf-hole-in'));
+      const holeVals = holeInputs.map(i => parseInt(i.value, 10));
+      const allHolesFilled = holeVals.every(v => Number.isFinite(v) && v > 0);
+      const someHolesFilled = holeVals.some(v => Number.isFinite(v) && v > 0);
+
+      const pairObj = { players: [p1, p2], score: sc };
+      if (allHolesFilled) {
+        pairObj.holes = holeVals;
+        pairObj.score = holeVals.reduce((a, b) => a + b, 0);
+      } else if (someHolesFilled) {
+        toast('Kui sisestad augukaupa skoore, siis kõik 18 auku'); return;
+      }
+      pairs.push(pairObj);
+    }
+    if (!pairs.length) { toast('Vähemalt üks paar'); return; }
+
+    // save
+    if (editingRoundId !== null) {
+      const idx = data.rounds.findIndex(r => r.id === editingRoundId);
+      if (idx >= 0) data.rounds[idx] = { id, date, pairs };
+    } else {
+      if (data.rounds.some(r => r.id === id)) { toast(`Ring ${id} juba olemas`); return; }
+      data.rounds.push({ id, date, pairs });
+    }
+    saveData(); render(); renderAdmin(); closeRoundForm();
+    toast(`Ring ${id} salvestatud`);
+  }
+
+  function deleteRound (id) {
+    if (!confirm(`Kustuta ring ${id}?`)) return;
+    data.rounds = data.rounds.filter(r => r.id !== id);
+    saveData(); render(); renderAdmin();
+    toast(`Ring ${id} kustutatud`);
+  }
+
+  // ─── data actions ─────
+  document.getElementById('reset-data').addEventListener('click', () => {
+    if (!confirm('Kustuta kõik kohalikud muudatused ja tagane serveri andmete juurde?')) return;
+    resetData(); render(); renderAdmin();
+    toast('Lähtestatud');
+  });
+
+  document.getElementById('show-json').addEventListener('click', () => {
+    const out = document.getElementById('json-out');
+    out.value = JSON.stringify(data, null, 2);
+    out.classList.toggle('open');
+  });
+
+  document.getElementById('export-json').addEventListener('click', async () => {
+    const json = JSON.stringify(data, null, 2);
+    try {
+      await navigator.clipboard.writeText(json);
+      toast('Kopeeritud lõikelauale');
+    } catch {
+      const out = document.getElementById('json-out');
+      out.value = json;
+      out.classList.add('open');
+      out.select();
+      toast('Kopeeri käsitsi');
+    }
+  });
+
+  // ─── boot ─────────────────────────────────────────────
+  render();
+})();
+</script>
