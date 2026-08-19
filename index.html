@@ -632,7 +632,9 @@
     display: block;
     margin-top: 2px;
   }
-  .p-round-row .pending-tag {
+  .p-round-row .pending-tag,
+  .p-round-row .ghost-tag,
+  .p-round-row .mulligan-tag {
     font-size: 9px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -641,6 +643,14 @@
     padding: 3px 8px;
     border-radius: 2px;
   }
+  .p-round-row .mulligan-tag {
+    color: var(--gold);
+    border-color: var(--gold-dim);
+    border-style: solid;
+  }
+  .p-round-row .ghost-tag { color: var(--muted); }
+  .p-round-row.superseded { opacity: 0.55; }
+  .p-round-row.superseded .p-score { text-decoration: line-through; color: var(--muted); }
   /* Interactive + toggle on expandable rows */
   .p-round-row .p-plus {
     background: transparent;
@@ -904,6 +914,17 @@
   }
   .rf-holes-sum strong { color: var(--gold); font-family: var(--mono); font-size: 16px; }
 
+  .rf-mulligan {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0 2px;
+    font-size: 11px;
+    color: var(--ink-dim);
+    cursor: pointer;
+    user-select: none;
+  }
+  .rf-mulligan input { accent-color: var(--gold); }
   .rf-hole-toggle {
     background: transparent;
     border: 1px dashed var(--line-strong);
@@ -1562,18 +1583,36 @@
     const N       = players.length;
     const byName  = Object.fromEntries(players.map(p => [p.name, p]));
 
+    // ── mulligan / supersession index
+    // Any earlier pair entry for the same duo (by player names) is superseded
+    // when a later entry for that duo has `mulligan: true`. Superseded entries
+    // don't count for totals or matrix, but still show as historical scorecards.
+    const supersededPairs = new WeakSet();
+    const pairEntriesByKey = {};
+    rounds.forEach(r => r.pairs.forEach(pair => {
+      const k = pairKey(pair.players[0], pair.players[1]);
+      (pairEntriesByKey[k] ||= []).push({ pair, date: r.date, roundId: r.id });
+    }));
+    Object.values(pairEntriesByKey).forEach(entries => {
+      const mulligan = entries.find(e => e.pair.mulligan);
+      if (mulligan) entries.forEach(e => { if (e !== mulligan) supersededPairs.add(e.pair); });
+    });
+
     // ── per-player stats
     const stats = {};
     players.forEach(p => stats[p.name] = {
       name: p.name, color: p.color, total: 0, played: 0, best: null, scores: []
     });
-    rounds.forEach(r => r.pairs.forEach(pair => pair.players.forEach(pn => {
-      const s = stats[pn]; if (!s) return;
-      s.total += pair.score;
-      s.played += 1;
-      s.scores.push(pair.score);
-      if (s.best === null || pair.score < s.best) s.best = pair.score;
-    })));
+    rounds.forEach(r => r.pairs.forEach(pair => {
+      if (supersededPairs.has(pair)) return;
+      pair.players.forEach(pn => {
+        const s = stats[pn]; if (!s) return;
+        s.total += pair.score;
+        s.played += 1;
+        s.scores.push(pair.score);
+        if (s.best === null || pair.score < s.best) s.best = pair.score;
+      });
+    }));
 
     // ── hero
     document.getElementById('ring-current').textContent = rounds.length || 0;
@@ -1650,6 +1689,7 @@
     });
     const pairStats = {};
     rounds.forEach(r => r.pairs.forEach(pair => {
+      if (supersededPairs.has(pair)) return;
       const [a, b] = pair.players;
       const k = pairKey(a, b);
       if (!pairStats[k]) pairStats[k] = { scores: [], count: 0, best: null };
@@ -1690,50 +1730,65 @@
     const roundsEl = document.getElementById('rounds');
     roundsEl.innerHTML = '';
 
-    // Build pair-results lookup
+    // Build pair-results lookup: primary (counted) + any superseded (ghost) entries
     const pairResults = {};
-    rounds.forEach(r => r.pairs.forEach(pair => {
-      const k = pairKey(pair.players[0], pair.players[1]);
-      pairResults[k] = {
-        score: pair.score,
-        holes: pair.holes,
-        date: r.date,
-        roundId: r.id,
-        pair
-      };
-    }));
+    Object.entries(pairEntriesByKey).forEach(([k, entries]) => {
+      const primary = entries.find(e => !supersededPairs.has(e.pair)) || entries[entries.length - 1];
+      const superseded = entries.filter(e => supersededPairs.has(e.pair));
+      pairResults[k] = { primary, superseded };
+    });
+
+    const toResult = (e) => ({
+      score: e.pair.score, holes: e.pair.holes,
+      date: e.date, roundId: e.roundId, pair: e.pair
+    });
 
     players.forEach(p => {
       const partners = players.filter(x => x.name !== p.name);
-      const rows = partners.map(partner => ({
-        partner,
-        result: pairResults[pairKey(p.name, partner.name)]
+      // sort partners by primary date/score; pending alphabetical
+      const perPartner = partners.map(partner => ({
+        partner, entry: pairResults[pairKey(p.name, partner.name)]
       }));
-      // sort: played first (by date asc, then score), pending alphabetically
-      rows.sort((a, b) => {
-        if (a.result && !b.result) return -1;
-        if (!a.result && b.result) return 1;
-        if (a.result && b.result) {
-          const dc = a.result.date.localeCompare(b.result.date);
+      perPartner.sort((a, b) => {
+        if (a.entry && !b.entry) return -1;
+        if (!a.entry && b.entry) return 1;
+        if (a.entry && b.entry) {
+          const dc = a.entry.primary.date.localeCompare(b.entry.primary.date);
           if (dc !== 0) return dc;
-          return a.result.score - b.result.score;
+          return a.entry.primary.pair.score - b.entry.primary.pair.score;
         }
         return a.partner.name.localeCompare(b.partner.name);
       });
 
-      const playedRows = rows.filter(r => r.result);
+      // Flatten: primary row followed by any superseded rows (ghosts)
+      const rows = [];
+      perPartner.forEach(({partner, entry}) => {
+        if (!entry) {
+          rows.push({ partner, result: null, isSuperseded: false });
+        } else {
+          rows.push({ partner, result: toResult(entry.primary), isSuperseded: false });
+          entry.superseded.forEach(e => {
+            rows.push({ partner, result: toResult(e), isSuperseded: true });
+          });
+        }
+      });
+
+      const playedRows = rows.filter(r => r.result && !r.isSuperseded);
       const total = playedRows.reduce((s, r) => s + r.result.score, 0);
       const bestScore = playedRows.length ? Math.min(...playedRows.map(r => r.result.score)) : null;
 
-      const rowsHtml = rows.map(({partner, result}) => {
+      const rowsHtml = rows.map(({partner, result, isSuperseded}) => {
         if (result) {
-          const isBest = result.score === bestScore && playedRows.length > 1;
+          const isBest = !isSuperseded && result.score === bestScore && playedRows.length > 1;
           const hasHoles = Array.isArray(result.holes) && result.holes.length === 18 && data.course;
           const scHtml = hasHoles ? renderPairScorecardBody(result.pair, byName) : '';
+          const tagHtml = isSuperseded
+            ? '<span class="ghost-tag">asendatud</span>'
+            : (result.pair.mulligan ? '<span class="mulligan-tag">Mulligan</span>' : '');
           return `
-            <div class="p-round-row ${isBest ? 'best' : ''} ${hasHoles ? 'expandable' : ''}">
+            <div class="p-round-row ${isBest ? 'best' : ''} ${hasHoles ? 'expandable' : ''} ${isSuperseded ? 'superseded' : ''}">
               <button class="p-plus" type="button" ${hasHoles ? 'title="Ava skoorikaart"' : 'tabindex="-1"'}>+</button>
-              <span class="partner"><span class="dot-sm" style="--pc:${partner.color}"></span>${escapeHtml(partner.name)}</span>
+              <span class="partner"><span class="dot-sm" style="--pc:${partner.color}"></span>${escapeHtml(partner.name)}${tagHtml}</span>
               <div style="text-align:right;">
                 <div class="p-score">${result.score}</div>
                 <div class="p-date">${fmtDate(result.date)}</div>
@@ -2039,7 +2094,7 @@
       if (!r) return;
       document.getElementById('rf-id').value = r.id;
       document.getElementById('rf-date').value = r.date;
-      r.pairs.forEach(p => addPairRow(p.players[0], p.players[1], p.score, p.holes));
+      r.pairs.forEach(p => addPairRow(p.players[0], p.players[1], p.score, p.holes, !!p.mulligan));
     }
     roundForm.classList.add('open');
     roundForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2061,7 +2116,7 @@
     ).join('');
   }
 
-  function addPairRow (a = '', b = '', score = '', holes = null) {
+  function addPairRow (a = '', b = '', score = '', holes = null, mulligan = false) {
     const wrap = document.createElement('div');
     wrap.className = 'rf-pair-block';
 
@@ -2075,6 +2130,10 @@
         <input type="number" class="sc" min="30" max="200" placeholder="skoor" value="${score}" ${hasHoles ? 'readonly' : ''}>
         <button type="button" class="del-pair" title="Kustuta paar">×</button>
       </div>
+      <label class="rf-mulligan" title="Mulligan: asendab selle paari varasema ringi tulemuse (vana ring jääb skoorikaardina alles)">
+        <input type="checkbox" class="rf-mulligan-in" ${mulligan ? 'checked' : ''}>
+        <span>Mulligan (asendab paari varasema ringi)</span>
+      </label>
       <button type="button" class="rf-hole-toggle">${hasHoles ? '▾' : '▸'} 18 augu skoorid</button>
       <div class="rf-holes ${hasHoles ? 'open' : ''}">
         <div class="rf-holes-grid rf-out">${
@@ -2176,6 +2235,7 @@
       } else if (someHolesFilled) {
         toast('Kui sisestad augukaupa skoore, siis kõik 18 auku'); return;
       }
+      if (el.querySelector('.rf-mulligan-in')?.checked) pairObj.mulligan = true;
       pairs.push(pairObj);
     }
     if (!pairs.length) { toast('Vähemalt üks paar'); return; }
